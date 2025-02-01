@@ -33,7 +33,7 @@ function Sidebar() {
       <div className={`${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       } transform fixed lg:relative lg:translate-x-0 z-10 w-64 h-full bg-white dark:bg-gray-800 shadow-lg transition-transform duration-300 ease-in-out overflow-y-auto`}>
-        <div className="p-4">
+        <div className="p-4 ">
           <h1 className="text-2xl font-bold text-primary mb-6 right-0"> Bhagavad Gita</h1>
           <nav className="space-y-2">
             <Link

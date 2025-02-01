@@ -1,17 +1,20 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { FaMoon, FaSun } from "react-icons/fa";
+import { useTheme } from "../context/ThemeContext";
 function Home() {
   const [chapters, setChapters] = useState([]);
-
+  const { darkMode, toggleDarkMode } = useTheme();
   useEffect(() => {
     const fetchChapters = async () => {
       try {
-        const response = await axios.get('https://vedicscriptures.github.io/chapters');
+        const response = await axios.get(
+          "https://vedicscriptures.github.io/chapters"
+        );
         setChapters(response.data);
       } catch (error) {
-        console.error('Error fetching chapters:', error);
+        console.error("Error fetching chapters:", error);
       }
     };
 
@@ -19,11 +22,20 @@ function Home() {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-4xl font-bold text-center mb-8 text-primary">
-        Welcome to Bhagavad Gita
-      </h1>
-      
+    <div className="max-w-4xl mx-auto p-6 backdrop-blur-lg sticky top-0">
+      <div className="sticky top-0 backdrop-blur-lg flex-row justify-around flex">
+        <h1 className="text-4xl font-bold text-center mb-8 text-primary">
+          Welcome to Bhagavad Gita
+        </h1>
+        <button onClick={toggleDarkMode} className="rounded-md mb-8">
+          {darkMode ? (
+            <FaSun className="text-yellow-500" />
+          ) : (
+            <FaMoon className="text-gray-600" />
+          )}
+        </button>
+      </div>
+
       <div className="mb-8 text-center">
         <Link
           to="/chapter/1"
@@ -32,6 +44,7 @@ function Home() {
           Start Reading
         </Link>
       </div>
+      
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {chapters.map((chapter) => (

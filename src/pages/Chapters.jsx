@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
+import { FaMoon, FaSun } from "react-icons/fa";
+import { useTheme } from "../context/ThemeContext";
 function Chapters() {
   const [chapters, setChapters] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState('en');
-
+  const { darkMode, toggleDarkMode } = useTheme();
   useEffect(() => {
     const fetchChapters = async () => {
       try {
@@ -21,6 +22,18 @@ function Chapters() {
 
   return (
     <div className="max-w-6xl mx-auto p-6">
+            <div className="sticky top-0 backdrop-blur-lg flex-row justify-around flex">
+              <h1 className="text-4xl font-bold text-center mb-8 text-primary">
+                Welcome to Bhagavad Gita
+              </h1>
+              <button onClick={toggleDarkMode} className="rounded-md px-1.5 mb-8">
+                {darkMode ? (
+                  <FaSun className="text-yellow-500" />
+                ) : (
+                  <FaMoon className="text-gray-600" />
+                )}
+              </button>
+            </div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-primary">Chapters Overview</h1>
         <select
