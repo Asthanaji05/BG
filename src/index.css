@@ -11,3 +11,17 @@
 .font-sanskrit {
   font-family: 'Sanskrit Text', serif;
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #FF7F50;
+  border-radius: 10px;
+  max-height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
