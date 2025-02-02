@@ -3,8 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaArrowLeft, FaArrowRight, FaMoon, FaSun } from 'react-icons/fa';
 import { useTheme } from '../context/ThemeContext';
+// const { createAudioFileFromText, createAudioStreamFromText } = require('../test.cjs');
 import RightPage from './RightPage';
 import LeftPage from './LeftPage';
+// Import the functions from test.cjs
+
 function Reader() {
   const { chapter, verse } = useParams();
   const navigate = useNavigate();

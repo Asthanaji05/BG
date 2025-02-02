@@ -36,6 +36,7 @@ function Home() {
         </button>
       </div>
 
+
       <div className="mb-8 text-center">
         <Link
           to="/chapter/1"
@@ -61,6 +62,12 @@ function Home() {
             <div className="text-sm text-gray-500 dark:text-gray-400">
               {chapter.verses_count} verses
             </div>
+            <Link
+            to={`/chapter/${chapter.chapter_number}`}
+            className="mt-auto px-4 py-0 bg-primary text-white rounded-md hover:bg-opacity-90 transition-colors text-center"
+          >
+            Read
+          </Link>
           </div>
         ))}
       </div>
