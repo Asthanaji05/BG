@@ -1,15 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaPlay, FaDownload, FaVolumeUp } from "react-icons/fa";
 
 const LeftPage = ({ slok }) => {
   const [audioUrl, setAudioUrl] = useState(null);
+  const [hindiTranslation, setHindiTranslation] = useState("");
+  const [loading, setLoading] = useState(true);
+  const fetchTranslation = async (chapter, verse) => {
+    try {
+      const response = await fetch("https://bg-backend-ykf0.onrender.com/hindi-translation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chapter, verse }),
+      });
+
+      const data = await response.json();
+      setHindiTranslation(data.translation || "Translation not available");
+    } catch (error) {
+      console.error("Error fetching translation:", error);
+      setHindiTranslation("Error fetching translation.");
+    }
+    setLoading(false);
+  };
+  useEffect(() => {
+    if (slok?.chapter && slok?.verse) {
+      setLoading(true);
+      fetchTranslation(slok.chapter, slok.verse);
+    }
+  }, [slok]);
 
   // Function to fetch and play audio for any text
   const handlePlay = async (text) => {
     if (!text) return;
 
     try {
-      const response = await fetch("https://bg-backend-ykf0.onrender.com/generate-audio", {
+      // const response = await fetch("https://bg-backend-ykf0.onrender.com/generate-audio", {
+      const response = await fetch("http://127.0.0.1:5000/generate-audio", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
@@ -32,11 +57,14 @@ const LeftPage = ({ slok }) => {
     if (!slok?.slok) return;
 
     try {
-      const response = await fetch("https://bg-backend-ykf0.onrender.com/generate-audio", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: slok.slok }),
-      });
+      const response = await fetch(
+        "https://bg-backend-ykf0.onrender.com/generate-audio",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: slok.slok }),
+        }
+      );
 
       if (!response.ok) throw new Error("Failed to generate audio");
 
@@ -75,8 +103,22 @@ const LeftPage = ({ slok }) => {
               onClick={() => handlePlay(slok?.transliteration)}
             />
           </p>
-
           <p className="text-gray-800 dark:text-gray-200 mt-4 flex items-center gap-2">
+            <strong>Hindi Translation:</strong>
+            {loading ? (
+              <span>Loading...</span>
+            ) : (
+              <>
+                <FaVolumeUp
+                  className="text-blue-500 cursor-pointer"
+                  onClick={() => handlePlay(hindiTranslation)}
+                />
+                <br />
+                {hindiTranslation}
+              </>
+            )}
+          </p>
+          {/* <p className="text-gray-800 dark:text-gray-200 mt-4 flex items-center gap-2">
             <strong>Swami Tejomayananda's Hindi Translation:</strong>
             <FaVolumeUp
               className="text-blue-500 cursor-pointer"
@@ -84,7 +126,7 @@ const LeftPage = ({ slok }) => {
             />
             <br />
             {slok.tej.ht}
-          </p>
+          </p> */}
 
           <p className="text-gray-800 dark:text-gray-200 mt-4 flex items-center gap-2">
             <strong>Swami Prabhupad's English Translation:</strong>

@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { FaArrowLeft, FaArrowRight, FaMoon, FaSun } from 'react-icons/fa';
-import { useTheme } from '../context/ThemeContext';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { FaArrowLeft, FaArrowRight, FaMoon, FaSun } from "react-icons/fa";
+import { useTheme } from "../context/ThemeContext";
 // const { createAudioFileFromText, createAudioStreamFromText } = require('../test.cjs');
-import RightPage from './RightPage';
-import LeftPage from './LeftPage';
+import RightPage from "./RightPage";
+import LeftPage from "./LeftPage";
 // Import the functions from test.cjs
 
 function Reader() {
@@ -14,23 +14,23 @@ function Reader() {
   const [slok, setSlok] = useState(null);
   const [currentVerse, setCurrentVerse] = useState(parseInt(verse) || 1);
   const [loading, setLoading] = useState(true);
-  const [selectedAuthor, setSelectedAuthor] = useState('prabhu');
-  const [selectedLanguage, setSelectedLanguage] = useState('en');
-  const [verseInput, setVerseInput] = useState('');
+  const [selectedAuthor, setSelectedAuthor] = useState("prabhu");
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
+  const [verseInput, setVerseInput] = useState("");
   const { darkMode, toggleDarkMode } = useTheme();
-  const [pageTurnDirection, setPageTurnDirection] = useState('right');
+  const [pageTurnDirection, setPageTurnDirection] = useState("right");
 
-const handleNextVerse = () => {
-  setPageTurnDirection('right'); // Page turn right animation
-  setCurrentVerse((prev) => prev + 1);
-};
+  const handleNextVerse = () => {
+    setPageTurnDirection("right"); // Page turn right animation
+    setCurrentVerse((prev) => prev + 1);
+  };
 
-const handlePrevVerse = () => {
-  if (currentVerse > 1) {
-    setPageTurnDirection('left'); // Page turn left animation
-    setCurrentVerse((prev) => prev - 1);
-  }
-};
+  const handlePrevVerse = () => {
+    if (currentVerse > 1) {
+      setPageTurnDirection("left"); // Page turn left animation
+      setCurrentVerse((prev) => prev - 1);
+    }
+  };
 
   useEffect(() => {
     const fetchSlok = async () => {
@@ -42,7 +42,7 @@ const handlePrevVerse = () => {
         setSlok(response.data);
         navigate(`/chapter/${chapter}/verse/${currentVerse}`);
       } catch (error) {
-        console.error('Error fetching slok:', error);
+        console.error("Error fetching slok:", error);
       } finally {
         setLoading(false);
       }
@@ -55,50 +55,51 @@ const handlePrevVerse = () => {
     if (!slok || !slok[selectedAuthor]) return null;
 
     switch (selectedAuthor) {
-      case 'prabhu':
+      case "prabhu":
         return {
-          translation: selectedLanguage === 'en' ? slok.prabhu.et : null,
-          commentary: selectedLanguage === 'en' ? slok.prabhu.ec : null,
+          translation: selectedLanguage === "en" ? slok.prabhu.et : null,
+          commentary: selectedLanguage === "en" ? slok.prabhu.ec : null,
           author: "Swami Prabhupad",
-          language: 'en'
+          language: "en",
         };
-      case 'raman':
+      case "raman":
         return {
-          translation: selectedLanguage === 'en' ? slok.raman.et : null,
-          commentary: selectedLanguage === 'sa' ? slok.raman.sc : null,
+          translation: selectedLanguage === "en" ? slok.raman.et : null,
+          commentary: selectedLanguage === "sa" ? slok.raman.sc : null,
           author: "Sri Ramanuja",
-          language: selectedLanguage
+          language: selectedLanguage,
         };
-      case 'srid':
+      case "srid":
         return {
           translation: null,
-          commentary: selectedLanguage === 'sa' ? slok.srid.sc : null,
+          commentary: selectedLanguage === "sa" ? slok.srid.sc : null,
           author: "Sri Sridhara Swami",
-          language: 'sa'
+          language: "sa",
         };
-      case 'vallabh':
+      case "vallabh":
         return {
           translation: null,
-          commentary: selectedLanguage === 'sa' ? slok.vallabh.sc : null,
+          commentary: selectedLanguage === "sa" ? slok.vallabh.sc : null,
           author: "Sri Vallabhacharya",
-          language: 'sa'
+          language: "sa",
         };
-      case 'tej':
+      case "tej":
         return {
-          translation: selectedLanguage === 'hi' ? slok.tej.ht : null,
+          translation: selectedLanguage === "hi" ? slok.tej.ht : null,
           commentary: null,
           author: "Swami Tejomayananda",
-          language: 'hi'
+          language: "hi",
         };
       default:
         return null;
     }
   };
 
-
   const handleVerseNavigation = (e) => {
     e.preventDefault();
-    const [chapterNum, verseNum] = verseInput.split(':').map(num => parseInt(num.trim()));
+    const [chapterNum, verseNum] = verseInput
+      .split(":")
+      .map((num) => parseInt(num.trim()));
     if (chapterNum && verseNum) {
       navigate(`/chapter/${chapterNum}/verse/${verseNum}`);
       setCurrentVerse(verseNum);
@@ -163,20 +164,46 @@ const handlePrevVerse = () => {
             onClick={toggleDarkMode}
             className="p-2 rounded-md bg-gray-200 dark:bg-gray-700"
           >
-            {darkMode ? <FaSun className="text-yellow-500" /> : <FaMoon className="text-gray-600" />}
+            {darkMode ? (
+              <FaSun className="text-yellow-500" />
+            ) : (
+              <FaMoon className="text-gray-600" />
+            )}
           </button>
         </div>
       </div>
-
+      <div className="flex justify-between items-center mt-6">
+        <button
+          onClick={handlePrevVerse}
+          disabled={currentVerse <= 1}
+          className="flex items-center px-4 py-2 bg-primary text-white rounded-md disabled:opacity-50"
+        >
+          <FaArrowLeft className="mr-2" /> Previous Verse
+        </button>
+        <div className="text-center">
+          <span className="font-bold">Chapter {chapter}</span>
+          <span className="mx-2">|</span>
+          <span>Verse {currentVerse}</span>
+        </div>
+        <button
+          onClick={handleNextVerse}
+          className="flex items-center px-4 py-2 bg-primary text-white rounded-md"
+        >
+          Next Verse <FaArrowRight className="ml-2" />
+        </button>
+      </div>
+      <br />
       <div className="grid md:grid-cols-2 gap-6">
         {/* Left Page */}
-        <LeftPage slok={slok} commentary={commentary} pageTurnDirection={pageTurnDirection} />
+        <LeftPage
+          slok={slok}
+          commentary={commentary}
+          pageTurnDirection={pageTurnDirection}
+        />
 
         {/* Right Page */}
         <RightPage slok={slok} commentary={commentary} />
-
       </div>
-
 
       <div className="flex justify-between items-center mt-6">
         <button
